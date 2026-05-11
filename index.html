@@ -33,18 +33,23 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <div id="status" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font:16px sans-serif;color:#555;text-align:center;z-index:1">Loading…</div>
   <div id="err" style="display:none;position:fixed;top:0;left:0;right:0;padding:16px;background:#c00;color:#fff;font:14px monospace;z-index:9999;white-space:pre-wrap;word-break:break-all"></div>
   <script>
-    window.onerror = function(msg, src, line, col, err) {
+    window._log = function(msg) {
+      document.getElementById('status').textContent = msg;
+    };
+    window.onerror = function(msg, src, line) {
       var d = document.getElementById('err');
       d.style.display = 'block';
-      d.textContent = 'JS ERROR: ' + msg + '\n' + src + ':' + line;
+      d.textContent = 'ERROR: ' + msg + '\n' + src + ':' + line;
     };
     window.addEventListener('unhandledrejection', function(e) {
       var d = document.getElementById('err');
       d.style.display = 'block';
-      d.textContent = (d.textContent || '') + '\nPROMISE: ' + (e.reason && (e.reason.message || e.reason));
+      d.textContent = (d.textContent||'') + '\nPROMISE REJECTED: ' + (e.reason && (e.reason.stack || e.reason.message || e.reason));
     });
+    window._log('Bootstrap loading…');
   </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
