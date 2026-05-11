@@ -35,24 +35,11 @@ if (!window._flutter) {
 }
 _flutter.buildConfig = {"engineRevision":"42d3d75a56efe1a2e9902f52dc8006099c45d937","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"},{}]};
 
-window._log && window._log('Flutter loader starting…');
 _flutter.loader.load({
   serviceWorkerSettings: {
-    serviceWorkerVersion: "2273754450" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */
+    serviceWorkerVersion: "1883541140" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */
   },
   config: {
     canvasKitBaseUrl: "canvaskit/"
-  },
-  onEntrypointLoaded: function(engineInitializer) {
-    window._log && window._log('main.dart.js loaded, initializing engine…');
-    engineInitializer.initializeEngine().then(function(appRunner) {
-      window._log && window._log('Engine initialized, running app…');
-      return appRunner.runApp();
-    }).then(function() {
-      window._log && window._log('App running');
-    }).catch(function(e) {
-      var d = document.getElementById('err');
-      if (d) { d.style.display='block'; d.textContent = 'ENGINE ERROR: ' + e; }
-    });
   }
 });
