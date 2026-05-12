@@ -33,17 +33,27 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <div id="err" style="display:none;position:fixed;top:0;left:0;right:0;padding:16px;background:#c00;color:#fff;font:13px monospace;z-index:9999;white-space:pre-wrap;word-break:break-all;max-height:50vh;overflow:auto"></div>
+  <div id="err" style="display:none;position:fixed;top:0;left:0;right:0;padding:16px;background:#900;color:#fff;font:14px monospace;z-index:9999"></div>
   <script>
-    window.onerror = function(msg, src, line, col, err) {
-      var d = document.getElementById('err');
-      d.style.display = 'block';
-      d.textContent = 'ERROR: ' + msg + '\n' + src + ':' + line + '\n' + (err && err.stack ? err.stack : '');
+    var _firstErr = null;
+    var _errCount = 0;
+    function _showErr(msg) {
+      _errCount++;
+      if (_firstErr == null) {
+        _firstErr = msg;
+        var d = document.getElementById('err');
+        d.style.display = 'block';
+        d.textContent = msg;
+      } else {
+        document.getElementById('err').textContent = _firstErr + '\n(+' + (_errCount-1) + ' more errors)';
+      }
+    }
+    window.onerror = function(msg, src, line) {
+      _showErr('ERROR: ' + msg + '\nAt: ' + src + ':' + line);
     };
     window.addEventListener('unhandledrejection', function(e) {
-      var d = document.getElementById('err');
-      d.style.display = 'block';
-      d.textContent = (d.textContent||'') + '\nPROMISE: ' + (e.reason && (e.reason.stack || e.reason.message || String(e.reason)));
+      var r = e.reason;
+      _showErr('PROMISE REJECTED: ' + (r && (r.message || String(r))));
     });
   </script>
   <script src="flutter_bootstrap.js" async></script>
