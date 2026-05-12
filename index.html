@@ -48,8 +48,9 @@
         document.getElementById('err').textContent = _firstErr + '\n(+' + (_errCount-1) + ' more errors)';
       }
     }
-    window.onerror = function(msg, src, line) {
-      _showErr('ERROR: ' + msg + '\nAt: ' + src + ':' + line);
+    window.onerror = function(msg, src, line, col, err) {
+      var stack = err && err.stack ? '\n' + err.stack.split('\n').slice(0,6).join('\n') : '';
+      _showErr(msg + '\n' + src + ':' + line + stack);
     };
     window.addEventListener('unhandledrejection', function(e) {
       var r = e.reason;
